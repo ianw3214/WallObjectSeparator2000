@@ -1,6 +1,9 @@
 import bpy
 from bpy import context
 import random
+import subprocess
+import inspect, os
+from shutil import copyfile
 
 def getNormal(p1, p2, p3):
     """return the normal vector to the equation of a plane given by the 3 point vertices
@@ -48,6 +51,7 @@ for ob in bpy.data.objects:
 # keep track of which combinations we have checked to make sure we don't repeat checking any points
 checked = {}
 bar = len(coords)/2;
+# result will be in the form of normal vectors and constant if found
 result = None
 
 for i in range(100):           # TODO: Change range(1000) to be minimum guaranteed of 3 spots along wall
@@ -75,15 +79,18 @@ for i in range(100):           # TODO: Change range(1000) to be minimum guarante
                 break
     # break out of the loop if we have found the plane
     if reached > bar:
-        result = v1, v2, v3
+        result = n1, n2, n3, d
         break
 
 # check if we have found a suitable plane
 if result is None:
     print("No suitable planes were found.")
 else:
-    print(result)
+    # make 2 copies of the file and call scripts on the copies
 
-print("--")
-print(len(coords))
+    # SAMPLE COMMAND
+    # subprocess.run(["COMMAND", "ARG1", "ARG2", "ARG3", "ARG4"])
+    abs_path = os.getcwd() + os.path.sep + bpy.path.basename(bpy.context.blend_data.filepath)
+    print(abs_path)
+
 print("+=====+")
