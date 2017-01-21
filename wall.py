@@ -86,11 +86,22 @@ for i in range(100):           # TODO: Change range(1000) to be minimum guarante
 if result is None:
     print("No suitable planes were found.")
 else:
-    # make 2 copies of the file and call scripts on the copies
+    # GET THE CURRENT WORKING DIRECTORY AND FILE NAME OF CURRENT FILE
+    cwd = os.getcwd()
+    fName = bpy.path.basename(bpy.context.blend_data.filepath)
+    abs_path = cwd + os.path.sep + fName
+    print(abs_path + "ABS")
+    # make 2 copies of the current file, one for the wall and 1 for the objects
+    wall_path = cwd + os.path.sep + "wall" + fName
+    print(wall_path + "WALL")
+    copyfile(abs_path, wall_path)
+    obj_path = cwd + os.path.sep + "objects" + fName
+    print(obj_path + "OBJ")
+    copyfile(abs_path, obj_path)
 
-    # SAMPLE COMMAND
-    # subprocess.run(["COMMAND", "ARG1", "ARG2", "ARG3", "ARG4"])
-    abs_path = os.getcwd() + os.path.sep + bpy.path.basename(bpy.context.blend_data.filepath)
-    print(abs_path)
+    # call scripts to handle the resulting .blend files
+    cmd1 = "blender " + wall_path + " --background --python wallSep.py -- " + str(result[0]) + " '" + str(result[1]) + " " + str(result[2]) + " " + str(result[3])
+    print(cmd1)
+    subprocess.run(cmd1, shell=True)
 
 print("+=====+")
