@@ -11,4 +11,7 @@ The wall object separator 2000 allows user to take pictures of the environment a
 
 ## Installation
 
-To run the python script, open blender and import the target object. Then, press shift-F11 to open up the text editor. Press alt-O to open the script file, and press alt-P to run the script.
+Before running the script, make sure blender is installed and is included in the environment variables.
+Python version 3+ is recommended, and the script works on windows only.
+
+To run the script, simply put the .blend files in the same folder as the scripts and run the batch file.

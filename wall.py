@@ -44,7 +44,6 @@ for ob in bpy.data.objects:
     if not ob.type in ['MESH','CURVE']:
         pass
     else:
-        print (ob.name)
         coords += [(ob.matrix_world * v.co) for v in ob.data.vertices]
 
 # KEEP LOOPING UNTIL AT LEAST HALF OF THE COMBINATIONS HAVE BEEN CHECKED
@@ -70,7 +69,7 @@ for i in range(100):           # TODO: Change range(1000) to be minimum guarante
         # get the constant using the normal vector and current vertex
         key = getConstant((n1, n2, n3), vertex.to_tuple());
         # print out the results
-        print("{} : {}".format(key, d));
+        # print("{} : {}".format(key, d));
         # if the difference is less than 1, then it is most likely on the same plane
         if abs(key - d) <= 1.0:
             reached += 1        # increment the reached count
@@ -88,20 +87,28 @@ if result is None:
 else:
     # GET THE CURRENT WORKING DIRECTORY AND FILE NAME OF CURRENT FILE
     cwd = os.getcwd()
-    fName = bpy.path.basename(bpy.context.blend_data.filepath)
-    abs_path = cwd + os.path.sep + fName
-    print(abs_path + "ABS")
+    # fName = bpy.path.basename(bpy.context.blend_data.filepath)
+    # abs_path = cwd + os.path.sep + fName
+
     # make 2 copies of the current file, one for the wall and 1 for the objects
-    wall_path = cwd + os.path.sep + "wall" + fName
-    print(wall_path + "WALL")
-    copyfile(abs_path, wall_path)
-    obj_path = cwd + os.path.sep + "objects" + fName
-    print(obj_path + "OBJ")
-    copyfile(abs_path, obj_path)
+    # wall_path = cwd + os.path.sep + "wall" + fName
+    # print(wall_path + "WALL")
+    # copyfile(abs_path, wall_path)
+    # obj_path = cwd + os.path.sep + "objects" + fName
+    # print(obj_path + "OBJ")
+    # copyfile(abs_path, obj_path)
 
     # call scripts to handle the resulting .blend files
-    cmd1 = "blender " + wall_path + " --background --python wallSep.py -- " + str(result[0]) + " '" + str(result[1]) + " " + str(result[2]) + " " + str(result[3])
-    print(cmd1)
+    # cmd1 = "blender " + wall_path + " --background --python wallSep.py -- " + str(result[0]) + " " + str(result[1]) + " " + str(result[2]) + " " + str(result[3])
+    cmd1 = "blender --background --python wallSep.py -- " + str(result[0]) + " " + str(result[1]) + " " + str(result[2]) + " " + str(result[3])
+    # print(cmd1)
     subprocess.run(cmd1, shell=True)
+
+    # EXPORT THE DATA TO CSV
+    outputFile = cwd + os.path.sep + "data.csv"
+    csvLines = [ ";".join([ str(v) for v in co ]) + "\n" for co in coords ]
+    f = open( outputFile, 'w' )
+    f.writelines( csvLines )
+    f.close()
 
 print("+=====+")
